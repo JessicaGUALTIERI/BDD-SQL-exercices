@@ -8,7 +8,7 @@ Support de travail :
 
 
 __Ex 1__: Obtenir la liste des 10 villes les plus peuplées en 2012 :__
-SELECT villes_france_free.ville_nom FROM villes_france_free ORDER BY villes_france_free.ville_population2012 DESC LIMIT 10;
+SELECT villes_france_free.ville_nom FROM villes_france_free ORDER BY villes_france_free.ville_population_2012 DESC LIMIT 10;
 
 
 __Ex 2__: Obtenir la liste des 50 villes ayant la plus faible superficie :__
@@ -20,7 +20,7 @@ SELECT villes_france_free.ville_nom, villes_france_free.ville_departement FROM v
 
 
 __Ex 4__: Obtenir le nom des 10 villes les plus peuplées en 2012, ainsi que le nom du département associé :
-SELECT villes_france_free.ville_nom, departement.departement_nom FROM villes_france_free INNER JOIN departement ON villes_france_free.ville_departement=departement.departement_code ORDER BY villes_france_free.ville_population2012 DESC LIMIT 10;
+SELECT villes_france_free.ville_nom, departement.departement_nom FROM villes_france_free INNER JOIN departement ON villes_france_free.ville_departement=departement.departement_code ORDER BY villes_france_free.ville_population_2012 DESC LIMIT 10;
 
 
 __Ex 5__: Obtenir la liste du nom de chaque département, associé à son code et du nombre de commune au sein de ces département, en triant afin d’obtenir en priorité les départements qui possèdent le plus de communes :
@@ -36,12 +36,13 @@ SELECT COUNT(ville_nom) AS nbVilles FROM villes_france_free WHERE villes_france_
 
 
 __Ex 8__: Obtenir la liste des villes qui ont un nom existants plusieurs fois, et trier afin d’obtenir en premier celles dont le nom est le plus souvent utilisé par plusieurs communes :
-
+SELECT villes_france_free.ville_nom,COUNT(villes_france_free.ville_nom) AS nbMemeNom FROM villes_france_free GROUP BY villes_france_free.ville_nom ORDER BY nbMemeNom DESC;
 
 __Ex 9__: Obtenir en une seule requête SQL la liste des villes dont la superficie est supérieur à la superficie moyenne :
-
+SELECT villes_france_free.ville_nom, villes_france_free.ville_surface FROM villes_france_free WHERE villes_france_free.ville_surface > (SELECT AVG(villes_france_free.ville_surface) FROM villes_france_free) ORDER BY villes_france_free.ville_surface DESC;
 
 __Ex 10__: Obtenir la liste des départements qui possèdent plus de 2 millions d’habitants
-
+SELECT departement.departement_nom, SUM(villes_france_free.ville_population_2012) AS populationDepartement FROM departement INNER JOIN villes_france_free ON villes_france_free.ville_departement=departement.departement_code GROUP BY departement.departement_nom HAVING populationDepartement > 2000000 ORDER BY populationDepartement DESC;
 
 __Ex 11__: Remplacez les tirets par un espace vide, pour toutes les villes commençant par “SAINT-” (dans la colonne qui contient les noms en majuscule)
+UPDATE villes_france_free SET villes_france_free.ville_nom=(REPLACE(villes_france_free.ville_nom, '-', ' ')) WHERE villes_france_free.ville_nom LIKE "SAINT-%";
